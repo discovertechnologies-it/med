@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { m } from 'framer-motion';
 import { toast } from 'sonner';
 import {
@@ -39,12 +40,12 @@ const features = [
 ];
 
 const categories = [
-  { label: 'Diabetes care', count: '128 items', icon: <Droplet size={20} /> },
-  { label: 'Heart and BP', count: '94 items', icon: <Heart size={20} /> },
-  { label: 'Pain relief', count: '76 items', icon: <Pill size={20} /> },
-  { label: 'Vitamins', count: '212 items', icon: <Sparkles size={20} /> },
-  { label: 'Skin care', count: '143 items', icon: <Flower2 size={20} /> },
-  { label: 'Devices', count: '38 items', icon: <Stethoscope size={20} /> },
+  { slug: 'diabetes', label: 'Diabetes care', count: '128 items', icon: <Droplet size={20} /> },
+  { slug: 'heart-bp', label: 'Heart and BP', count: '94 items', icon: <Heart size={20} /> },
+  { slug: 'pain-relief', label: 'Pain relief', count: '76 items', icon: <Pill size={20} /> },
+  { slug: 'vitamins', label: 'Vitamins', count: '212 items', icon: <Sparkles size={20} /> },
+  { slug: 'skin-care', label: 'Skin care', count: '143 items', icon: <Flower2 size={20} /> },
+  { slug: 'devices', label: 'Devices', count: '38 items', icon: <Stethoscope size={20} /> },
 ];
 
 const howItWorks = [
@@ -71,6 +72,7 @@ const howItWorks = [
 const trustItems = ['Pharmacist on record', 'COD available', '7-day return on damage'];
 
 export default function Home() {
+  const navigate = useNavigate();
   return (
     <>
       {/* Hero */}
@@ -87,10 +89,7 @@ export default function Home() {
             </p>
 
             <div className="mt-6 flex flex-col sm:flex-row gap-3">
-              <Button
-                leftIcon={<Search size={18} />}
-                onClick={() => toast.success('Welcome to Med')}
-              >
+              <Button leftIcon={<Search size={18} />} onClick={() => navigate('/search')}>
                 Start a search
               </Button>
               <Button
@@ -154,7 +153,12 @@ export default function Home() {
               Curated by what people order most often.
             </p>
           </div>
-          <Button variant="ghost" size="sm" rightIcon={<ArrowRight size={16} />}>
+          <Button
+            variant="ghost"
+            size="sm"
+            rightIcon={<ArrowRight size={16} />}
+            onClick={() => navigate('/search')}
+          >
             See all
           </Button>
         </div>
@@ -168,12 +172,13 @@ export default function Home() {
         >
           {categories.map((c) => (
             <m.button
-              key={c.label}
+              key={c.slug}
               variants={fadeUp}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
               transition={springs.soft}
               type="button"
+              onClick={() => navigate(`/search?category=${c.slug}`)}
               className="text-left bg-bg-surface border border-border-subtle rounded-xl p-4 hover:border-border-strong hover:shadow-card transition"
             >
               <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary-muted text-primary">
@@ -224,8 +229,17 @@ export default function Home() {
           </m.ol>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-3">
-            <Button leftIcon={<Upload size={18} />}>Upload prescription</Button>
-            <Button variant="secondary" rightIcon={<ArrowRight size={18} />}>
+            <Button
+              leftIcon={<Upload size={18} />}
+              onClick={() => toast('Prescription upload coming soon')}
+            >
+              Upload prescription
+            </Button>
+            <Button
+              variant="secondary"
+              rightIcon={<ArrowRight size={18} />}
+              onClick={() => navigate('/search')}
+            >
               Browse medicines
             </Button>
           </div>
