@@ -1,0 +1,20 @@
+{
+  "name": "med",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Medicine eCommerce — mobile-first responsive web app",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@med/web",
+    "build": "npm run build --workspace=@med/web",
+    "preview": "npm run preview --workspace=@med/web",
+    "lint": "npm run lint --workspace=@med/web",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  }
+}

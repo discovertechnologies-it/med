@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-bg-page text-text-primary font-sans antialiased;
+    font-feature-settings: 'cv11' 1, 'ss01' 1;
+  }
+
+  :focus-visible {
+    @apply outline-none shadow-focus rounded-lg;
+  }
+
+  /* tabular numerics for prices, OTPs, IDs */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* min 16px on inputs to prevent iOS zoom */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  @media (min-width: 768px) {
+    input,
+    select,
+    textarea {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+@layer components {
+  .skeleton {
+    @apply bg-bg-muted rounded-lg animate-pulse-soft;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton {
+      animation: none;
+    }
+  }
+}
