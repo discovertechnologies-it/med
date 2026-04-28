@@ -7,6 +7,7 @@ import Skeleton from '@/components/Skeleton';
 const Home = lazy(() => import('@/pages/Home'));
 const Search = lazy(() => import('@/pages/Search'));
 const MedicineDetail = lazy(() => import('@/pages/MedicineDetail'));
+const Cart = lazy(() => import('@/pages/Cart'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
 const withSuspense = (node) => <Suspense fallback={<Skeleton.Page />}>{node}</Suspense>;
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
       { path: '/', element: withSuspense(<Home />) },
       { path: '/search', element: withSuspense(<Search />) },
       { path: '/medicine/:id', element: withSuspense(<MedicineDetail />) },
+      { path: '/cart', element: withSuspense(<Cart />) },
       // protected routes wired as their pages land
       // example: { path: '/checkout', element: protectedRoute(<Checkout />) },
       { path: '*', element: withSuspense(<NotFound />) },
