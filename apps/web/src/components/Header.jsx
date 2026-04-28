@@ -1,0 +1,96 @@
+import { Link, NavLink } from 'react-router-dom';
+import { m } from 'framer-motion';
+import { ShoppingBag, Search, User } from 'lucide-react';
+import clsx from 'clsx';
+import Logo from './Logo';
+import Button from './Button';
+import { useCartStore } from '@/store/useCartStore';
+import { useScrolled } from '@/hooks/useScrolled';
+import { springs } from '@/motion/transitions';
+
+const navLinks = [
+  { to: '/search', label: 'Search' },
+  { to: '/categories', label: 'Categories' },
+  { to: '/orders', label: 'Orders' },
+  { to: '/help', label: 'Help' },
+];
+
+export default function Header() {
+  const cartCount = useCartStore((s) => s.items.reduce((n, i) => n + i.qty, 0));
+  const scrolled = useScrolled(4);
+
+  return (
+    <header
+      className={clsx(
+        'sticky top-0 z-40 transition-colors duration-200',
+        scrolled
+          ? 'bg-bg-page/85 backdrop-blur-md border-b border-border-subtle'
+          : 'bg-bg-page border-b border-transparent'
+      )}
+    >
+      <div className="mx-auto max-w-screen-xl px-4 md:px-6 lg:px-8 h-14 md:h-16 flex items-center justify-between gap-4">
+        <Logo />
+
+        <nav className="hidden md:flex items-center gap-1">
+          {navLinks.map((l) => (
+            <NavLink
+              key={l.to}
+              to={l.to}
+              className={({ isActive }) =>
+                clsx(
+                  'px-3 h-9 inline-flex items-center rounded-full text-body font-medium transition-colors',
+                  isActive
+                    ? 'bg-primary-muted text-primary'
+                    : 'text-text-secondary hover:text-text-primary hover:bg-bg-muted'
+                )
+              }
+            >
+              {l.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-1 md:gap-2">
+          <Link
+            to="/search"
+            className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full text-text-primary hover:bg-bg-muted"
+            aria-label="Search"
+          >
+            <Search size={20} />
+          </Link>
+
+          <Link
+            to="/cart"
+            className="relative inline-flex h-11 w-11 items-center justify-center rounded-full text-text-primary hover:bg-bg-muted"
+            aria-label={`Cart, ${cartCount} ${cartCount === 1 ? 'item' : 'items'}`}
+          >
+            <ShoppingBag size={20} />
+            {cartCount > 0 && (
+              <m.span
+                key={cartCount}
+                initial={{ scale: 0.6, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={springs.snappy}
+                className="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 inline-flex items-center justify-center rounded-full bg-accent text-white text-[11px] font-semibold tabular"
+              >
+                {cartCount > 99 ? '99+' : cartCount}
+              </m.span>
+            )}
+          </Link>
+
+          <Link to="/auth/login" className="hidden md:inline-flex">
+            <Button size="sm" variant="ghost" leftIcon={<User size={18} />}>
+              Sign in
+            </Button>
+          </Link>
+
+          <Link to="/auth/login" className="md:hidden">
+            <Button size="sm" variant="ghost" aria-label="Sign in">
+              <User size={18} />
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </header>
+  );
+}

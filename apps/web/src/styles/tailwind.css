@@ -10,7 +10,18 @@
 
   body {
     @apply bg-bg-page text-text-primary font-sans antialiased;
-    font-feature-settings: 'cv11' 1, 'ss01' 1;
+    font-feature-settings:
+      'cv11' 1,
+      'ss01' 1,
+      'ss03' 1;
+    letter-spacing: -0.005em;
+  }
+
+  h1,
+  h2,
+  h3,
+  .display {
+    letter-spacing: -0.018em;
   }
 
   :focus-visible {

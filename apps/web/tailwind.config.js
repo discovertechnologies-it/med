@@ -43,7 +43,7 @@ export default {
       },
       fontFamily: {
         sans: [
-          'Inter var',
+          '"Inter Variable"',
           'Inter',
           'system-ui',
           '-apple-system',
