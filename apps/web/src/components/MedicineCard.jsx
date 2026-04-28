@@ -4,27 +4,14 @@ import { toast } from 'sonner';
 import { Plus, ShieldAlert, Tag, Sparkles } from 'lucide-react';
 import clsx from 'clsx';
 import Badge from './Badge';
+import ProductImage from './ProductImage';
 import { formatPrice, discountPercent } from '@/utils/formatPrice';
 import { useCartStore } from '@/store/useCartStore';
 import { springs } from '@/motion/transitions';
 
-// Deterministic muted tint per id, picking from locked tokens only.
-const tints = [
-  { bg: 'bg-primary-muted', fg: 'text-primary' },
-  { bg: 'bg-accent-muted', fg: 'text-accent' },
-  { bg: 'bg-success-muted', fg: 'text-success' },
-  { bg: 'bg-warning-muted', fg: 'text-warning' },
-];
-function tintFor(id) {
-  let h = 0;
-  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 1000;
-  return tints[h % tints.length];
-}
-
 export default function MedicineCard({ medicine, className }) {
   const addItem = useCartStore((s) => s.addItem);
   const discount = discountPercent(medicine.mrp, medicine.sellingPrice);
-  const tint = tintFor(medicine.id);
 
   const handleAdd = (e) => {
     e.preventDefault();
@@ -50,19 +37,9 @@ export default function MedicineCard({ medicine, className }) {
           'shadow-card hover:shadow-pop hover:border-border-strong transition'
         )}
       >
-        {/* Image area — fixed aspect, bigger decorative initial, badge overlays */}
-        <div className="relative aspect-square bg-bg-image flex items-center justify-center">
-          <div
-            className={clsx(
-              'h-[58%] w-[58%] rounded-3xl flex items-center justify-center',
-              tint.bg
-            )}
-            aria-hidden
-          >
-            <span className={clsx('text-display-lg font-bold', tint.fg, 'opacity-90')}>
-              {medicine.brand.charAt(0)}
-            </span>
-          </div>
+        {/* Image area — uses shared ProductImage so gallery and card stay consistent */}
+        <div className="relative">
+          <ProductImage medicine={medicine} variant="front" size="sm" withGuides={false} rounded="" />
 
           {/* Top-left: stacked Rx + Generic */}
           <div className="absolute top-2 left-2 flex flex-col items-start gap-1">

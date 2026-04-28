@@ -21,6 +21,7 @@ import {
 import Button from '@/components/Button';
 import Badge from '@/components/Badge';
 import MedicineCard from '@/components/MedicineCard';
+import ProductGallery from '@/components/ProductGallery';
 import { findMedicine, alternativesFor } from '@/data/mockCatalog';
 import { formatPrice, discountPercent } from '@/utils/formatPrice';
 import { useCartStore } from '@/store/useCartStore';
@@ -81,9 +82,9 @@ export default function MedicineDetail() {
       </Link>
 
       <div className="mt-4 md:mt-6 grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10">
-        {/* Image */}
+        {/* Gallery */}
         <div className="lg:col-span-5">
-          <ProductHero medicine={medicine} />
+          <ProductGallery medicine={medicine} />
         </div>
 
         {/* Details */}
@@ -248,27 +249,6 @@ export default function MedicineDetail() {
         </div>
       </div>
     </main>
-  );
-}
-
-function ProductHero({ medicine }) {
-  return (
-    <div className="relative aspect-square rounded-2xl bg-bg-image border border-border-subtle overflow-hidden flex items-center justify-center">
-      {/* Concentric guide circles for visual interest */}
-      <div
-        aria-hidden
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
-      >
-        <div className="h-[78%] w-[78%] rounded-full border border-border-subtle/70" />
-        <div className="absolute h-[58%] w-[58%] rounded-full border border-border-subtle" />
-      </div>
-
-      <div className="relative h-[44%] w-[44%] rounded-3xl bg-primary-muted flex items-center justify-center shadow-card">
-        <span className="text-display-lg md:text-[5rem] leading-none font-bold text-primary">
-          {medicine.brand.charAt(0)}
-        </span>
-      </div>
-    </div>
   );
 }
 
