@@ -43,15 +43,20 @@ export default function HeroIllustration({ className = '' }) {
         <line x1="210" y1="260" x2="250" y2="260" />
       </g>
 
-      {/* Verified shield badge */}
-      <m.g animate={float} className="text-primary">
+      {/* Verified shield badge — solid fill, white check for contrast */}
+      <m.g animate={float}>
         <path
           d="M132 130c0-3 2-5 5-6l22-7c1-0.4 3-0.4 4 0l22 7c3 1 5 3 5 6v18c0 14-10 24-29 32-19-8-29-18-29-32z"
+          className="text-primary"
           fill="currentColor"
-          fillOpacity="0.08"
+          stroke="none"
         />
-        <path d="M132 130c0-3 2-5 5-6l22-7c1-0.4 3-0.4 4 0l22 7c3 1 5 3 5 6v18c0 14-10 24-29 32-19-8-29-18-29-32z" />
-        <path d="M150 145l8 8 14-14" />
+        <path
+          d="M150 145l8 8 14-14"
+          stroke="white"
+          strokeWidth="2.5"
+          fill="none"
+        />
       </m.g>
 
       {/* Floating capsule pill */}

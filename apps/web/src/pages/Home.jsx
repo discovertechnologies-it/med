@@ -1,6 +1,20 @@
 import { m } from 'framer-motion';
 import { toast } from 'sonner';
-import { ShieldCheck, Pill, Truck, Search, ArrowRight } from 'lucide-react';
+import {
+  ShieldCheck,
+  Pill,
+  Truck,
+  Search,
+  ArrowRight,
+  Heart,
+  Droplet,
+  Sparkles,
+  Flower2,
+  Stethoscope,
+  CheckCircle2,
+  Upload,
+  PackageCheck,
+} from 'lucide-react';
 import Button from '@/components/Button';
 import HeroIllustration from '@/components/HeroIllustration';
 import { staggerContainer, fadeUp } from '@/motion/variants';
@@ -25,13 +39,36 @@ const features = [
 ];
 
 const categories = [
-  { label: 'Diabetes care', count: '128 items' },
-  { label: 'Heart and BP', count: '94 items' },
-  { label: 'Pain relief', count: '76 items' },
-  { label: 'Vitamins', count: '212 items' },
-  { label: 'Skin care', count: '143 items' },
-  { label: 'Devices', count: '38 items' },
+  { label: 'Diabetes care', count: '128 items', icon: <Droplet size={20} /> },
+  { label: 'Heart and BP', count: '94 items', icon: <Heart size={20} /> },
+  { label: 'Pain relief', count: '76 items', icon: <Pill size={20} /> },
+  { label: 'Vitamins', count: '212 items', icon: <Sparkles size={20} /> },
+  { label: 'Skin care', count: '143 items', icon: <Flower2 size={20} /> },
+  { label: 'Devices', count: '38 items', icon: <Stethoscope size={20} /> },
 ];
+
+const howItWorks = [
+  {
+    icon: <Search size={22} />,
+    step: '01',
+    title: 'Search or upload',
+    body: 'Find by salt, brand, or drop in a prescription photo. Autocomplete handles typos.',
+  },
+  {
+    icon: <ShieldCheck size={22} />,
+    step: '02',
+    title: 'Pharmacist verifies',
+    body: 'A licensed pharmacist reviews your prescription within 30 minutes during work hours.',
+  },
+  {
+    icon: <PackageCheck size={22} />,
+    step: '03',
+    title: 'Delivered to your door',
+    body: 'Track in real time. Pay via UPI, card, or cash on delivery. Refills are automatic.',
+  },
+];
+
+const trustItems = ['Pharmacist on record', 'COD available', '7-day return on damage'];
 
 export default function Home() {
   return (
@@ -40,7 +77,7 @@ export default function Home() {
       <section className="mx-auto max-w-screen-xl px-4 md:px-6 lg:px-8 pt-8 pb-12 md:pt-14 md:pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           <div className="lg:col-span-6">
-            <p className="text-label uppercase text-primary">Pharmacy, online</p>
+            <p className="text-label uppercase text-primary">Online pharmacy</p>
             <h1 className="mt-3 text-display md:text-display-lg text-text-primary">
               Medicines you trust, delivered to your door.
             </h1>
@@ -65,17 +102,14 @@ export default function Home() {
               </Button>
             </div>
 
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-caption text-text-secondary">
-              <span className="inline-flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-success" /> Pharmacist on record
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-success" /> COD available
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-success" /> 7-day return on damage
-              </span>
-            </div>
+            <ul className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-caption text-text-secondary">
+              {trustItems.map((t) => (
+                <li key={t} className="inline-flex items-center gap-1.5">
+                  <CheckCircle2 size={14} className="text-success" aria-hidden />
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div className="lg:col-span-6">
@@ -112,7 +146,7 @@ export default function Home() {
       </section>
 
       {/* Featured categories */}
-      <section className="mx-auto max-w-screen-xl px-4 md:px-6 lg:px-8 pb-16 md:pb-20">
+      <section className="mx-auto max-w-screen-xl px-4 md:px-6 lg:px-8 pb-12 md:pb-16">
         <div className="flex items-end justify-between gap-4 mb-5 md:mb-6">
           <div>
             <h2 className="text-h2 md:text-h2-lg text-text-primary">Shop by category</h2>
@@ -142,12 +176,60 @@ export default function Home() {
               type="button"
               className="text-left bg-bg-surface border border-border-subtle rounded-xl p-4 hover:border-border-strong hover:shadow-card transition"
             >
-              <div className="h-10 w-10 rounded-full bg-bg-image" aria-hidden />
+              <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary-muted text-primary">
+                {c.icon}
+              </div>
               <p className="mt-3 text-body font-semibold text-text-primary">{c.label}</p>
               <p className="text-caption text-text-tertiary tabular">{c.count}</p>
             </m.button>
           ))}
         </m.div>
+      </section>
+
+      {/* How it works */}
+      <section className="mx-auto max-w-screen-xl px-4 md:px-6 lg:px-8 pb-16 md:pb-24">
+        <div className="bg-bg-surface border border-border-subtle rounded-2xl shadow-card p-6 md:p-10 lg:p-12">
+          <div className="max-w-2xl">
+            <p className="text-label uppercase text-primary">How it works</p>
+            <h2 className="mt-2 text-h1 md:text-h1-lg text-text-primary">
+              From search to doorstep in three steps.
+            </h2>
+          </div>
+
+          <m.ol
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, margin: '-50px' }}
+            className="mt-8 md:mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative"
+          >
+            {howItWorks.map((s, idx) => (
+              <m.li key={s.step} variants={fadeUp} className="relative">
+                <div className="flex items-center gap-3">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white">
+                    {s.icon}
+                  </div>
+                  <span className="text-label uppercase text-text-tertiary tabular">{s.step}</span>
+                </div>
+                <h3 className="mt-4 text-h3 text-text-primary">{s.title}</h3>
+                <p className="mt-2 text-body text-text-secondary">{s.body}</p>
+                {idx < howItWorks.length - 1 && (
+                  <span
+                    aria-hidden
+                    className="hidden md:block absolute top-5 left-full w-full -translate-x-1/2 h-px bg-border-subtle"
+                  />
+                )}
+              </m.li>
+            ))}
+          </m.ol>
+
+          <div className="mt-10 flex flex-col sm:flex-row gap-3">
+            <Button leftIcon={<Upload size={18} />}>Upload prescription</Button>
+            <Button variant="secondary" rightIcon={<ArrowRight size={18} />}>
+              Browse medicines
+            </Button>
+          </div>
+        </div>
       </section>
     </>
   );
