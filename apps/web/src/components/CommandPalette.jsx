@@ -31,6 +31,7 @@ import { useAuthStore, selectIsAuthenticated } from '@/store/useAuthStore';
 import { useCartStore } from '@/store/useCartStore';
 import { useDebounce } from '@/hooks/useDebounce';
 import { isMac } from '@/hooks/useKeyboardShortcut';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import { searchMedicines } from '@/data/mockCatalog';
 import { springs, baseTransition } from '@/motion/transitions';
 import { formatPrice } from '@/utils/formatPrice';
@@ -78,6 +79,8 @@ export default function CommandPalette() {
   const listRef = useRef(null);
 
   const debouncedQuery = useDebounce(query, 100);
+
+  useBodyScrollLock(open);
 
   // Reset state when opened
   useEffect(() => {
@@ -260,7 +263,7 @@ export default function CommandPalette() {
               {/* Results */}
               <div
                 ref={listRef}
-                className="max-h-[60vh] overflow-y-auto overflow-x-hidden py-2 scrollbar-subtle"
+                className="max-h-[60vh] overflow-y-auto overflow-x-hidden py-2"
                 role="listbox"
                 aria-label="Results"
               >

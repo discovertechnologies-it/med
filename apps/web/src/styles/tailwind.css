@@ -35,6 +35,39 @@
     box-shadow: none;
   }
 
+  /* Premium scrollbars everywhere by default. */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.border.subtle') transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: theme('colors.border.subtle');
+    border-radius: 9999px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    transition: background 200ms;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: theme('colors.border.strong');
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* Body scroll lock when a modal claims the document. */
+  body.scroll-locked {
+    overflow: hidden;
+    /* paddingRight is set inline by useBodyScrollLock to compensate for the lost scrollbar */
+  }
+
   /* tabular numerics for prices, OTPs, IDs */
   .tabular {
     font-variant-numeric: tabular-nums;
