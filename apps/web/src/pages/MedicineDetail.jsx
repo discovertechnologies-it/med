@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { m } from 'framer-motion';
 import { toast } from 'sonner';
@@ -25,10 +25,12 @@ import ProductGallery from '@/components/ProductGallery';
 import WishlistButton from '@/components/WishlistButton';
 import StarRating from '@/components/StarRating';
 import ReviewsSection from '@/components/ReviewsSection';
+import RecentlyViewed from '@/components/RecentlyViewed';
 import { getReviews, ratingSummary } from '@/data/mockReviews';
 import { findMedicine, alternativesFor } from '@/data/mockCatalog';
 import { formatPrice, discountPercent } from '@/utils/formatPrice';
 import { useCartStore } from '@/store/useCartStore';
+import { useRecentStore } from '@/store/useRecentStore';
 import { staggerContainer, fadeUp } from '@/motion/variants';
 import { springs } from '@/motion/transitions';
 
@@ -39,6 +41,11 @@ export default function MedicineDetail() {
   const item = useCartStore((s) => s.items.find((i) => i.id === id));
   const addItem = useCartStore((s) => s.addItem);
   const updateQty = useCartStore((s) => s.updateQty);
+  const trackView = useRecentStore((s) => s.addView);
+
+  useEffect(() => {
+    if (medicine) trackView(medicine.id);
+  }, [medicine, trackView]);
 
   if (!medicine) {
     return <Navigate to="/search" replace />;
@@ -254,6 +261,11 @@ export default function MedicineDetail() {
           </m.div>
         </section>
       )}
+
+      {/* Recently viewed (excludes current) */}
+      <div className="mt-10 md:mt-14 -mx-4 md:-mx-6 lg:-mx-8">
+        <RecentlyViewed excludeId={medicine.id} />
+      </div>
 
       {/* Mobile sticky CTA */}
       <div className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-bg-surface/95 backdrop-blur-md border-t border-border-subtle px-4 py-3 flex items-center gap-3">

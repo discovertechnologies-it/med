@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import Button from '@/components/Button';
 import HeroIllustration from '@/components/HeroIllustration';
+import RecentlyViewed from '@/components/RecentlyViewed';
 import { staggerContainer, fadeUp } from '@/motion/variants';
 import { springs } from '@/motion/transitions';
 
@@ -116,6 +117,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Recently viewed (only renders for returning users with 2+ history) */}
+      <RecentlyViewed />
 
       {/* Features */}
       <section className="mx-auto max-w-screen-xl px-4 md:px-6 lg:px-8 pb-12 md:pb-16">
