@@ -15,8 +15,10 @@ import {
   CheckCircle2,
   Upload,
   PackageCheck,
+  Package,
 } from 'lucide-react';
 import Button from '@/components/Button';
+import { useAuthStore, selectIsAuthenticated } from '@/store/useAuthStore';
 import HeroIllustration from '@/components/HeroIllustration';
 import RecentlyViewed from '@/components/RecentlyViewed';
 import RefillReminders from '@/components/RefillReminders';
@@ -76,6 +78,7 @@ const trustItems = ['Pharmacist on record', 'COD available', '7-day return on da
 
 export default function Home() {
   const navigate = useNavigate();
+  const isAuthed = useAuthStore(selectIsAuthenticated);
   return (
     <>
       {/* Hero */}
@@ -95,13 +98,23 @@ export default function Home() {
               <Button leftIcon={<Search size={18} />} onClick={() => navigate('/search')}>
                 Start a search
               </Button>
-              <Button
-                variant="secondary"
-                rightIcon={<ArrowRight size={18} />}
-                onClick={() => toast('Sign up coming soon')}
-              >
-                Create account
-              </Button>
+              {isAuthed ? (
+                <Button
+                  variant="secondary"
+                  leftIcon={<Package size={18} />}
+                  onClick={() => navigate('/orders')}
+                >
+                  Your orders
+                </Button>
+              ) : (
+                <Button
+                  variant="secondary"
+                  rightIcon={<ArrowRight size={18} />}
+                  onClick={() => navigate('/auth/login')}
+                >
+                  Create account
+                </Button>
+              )}
             </div>
 
             <ul className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-caption text-text-secondary">
