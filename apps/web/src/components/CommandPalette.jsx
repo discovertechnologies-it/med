@@ -260,7 +260,7 @@ export default function CommandPalette() {
               {/* Results */}
               <div
                 ref={listRef}
-                className="max-h-[60vh] overflow-y-auto py-2"
+                className="max-h-[60vh] overflow-y-auto overflow-x-hidden py-2 scrollbar-subtle"
                 role="listbox"
                 aria-label="Results"
               >
@@ -308,8 +308,8 @@ export default function CommandPalette() {
 
 function ResultGroup({ heading, children }) {
   return (
-    <div className="mb-1">
-      <p className="px-3 pt-2 pb-1 text-label uppercase text-text-tertiary">{heading}</p>
+    <div className="mb-1 px-2">
+      <p className="px-1 pt-2 pb-1 text-label uppercase text-text-tertiary">{heading}</p>
       <ul>{children}</ul>
     </div>
   );
@@ -325,7 +325,7 @@ function ResultRow({ item, active, index, onMouseEnter, onClick }) {
         onMouseEnter={onMouseEnter}
         data-cmd-index={index}
         className={clsx(
-          'w-full text-left flex items-center gap-3 px-3 py-2.5 mx-2 rounded-xl transition-colors',
+          'w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors',
           active ? 'bg-primary-muted text-text-primary' : 'hover:bg-bg-muted'
         )}
       >

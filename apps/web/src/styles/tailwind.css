@@ -28,6 +28,13 @@
     @apply outline-none shadow-focus rounded-lg;
   }
 
+  /* Form fields manage their own focus via border-color — clear the global ring */
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    box-shadow: none;
+  }
+
   /* tabular numerics for prices, OTPs, IDs */
   .tabular {
     font-variant-numeric: tabular-nums;
@@ -58,5 +65,28 @@
     .skeleton {
       animation: none;
     }
+  }
+
+  /* Premium subtle scrollbar — used in dialog/menu lists */
+  .scrollbar-subtle {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.border.strong') transparent;
+  }
+  .scrollbar-subtle::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scrollbar-subtle::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-subtle::-webkit-scrollbar-thumb {
+    background: theme('colors.border.subtle');
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  .scrollbar-subtle::-webkit-scrollbar-thumb:hover {
+    background: theme('colors.border.strong');
+    background-clip: padding-box;
   }
 }
