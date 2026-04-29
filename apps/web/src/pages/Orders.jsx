@@ -1,10 +1,13 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { m } from 'framer-motion';
-import { ArrowRight, Package, ShoppingBag } from 'lucide-react';
+import { toast } from 'sonner';
+import { ArrowRight, Package, ShoppingBag, Repeat } from 'lucide-react';
 import Button from '@/components/Button';
 import Badge from '@/components/Badge';
 import { useOrderStore } from '@/store/useOrderStore';
+import { useCartStore } from '@/store/useCartStore';
+import { findMedicine } from '@/data/mockCatalog';
 import { formatPrice } from '@/utils/formatPrice';
 import { staggerContainer, fadeUp } from '@/motion/variants';
 import { springs } from '@/motion/transitions';
@@ -20,6 +23,31 @@ const statusBadge = {
 
 export default function Orders() {
   const orders = useOrderStore((s) => s.orders);
+  const addMany = useCartStore((s) => s.addMany);
+  const navigate = useNavigate();
+
+  const handleReorder = (order) => {
+    const incoming = order.items
+      .map((it) => {
+        const fresh = findMedicine(it.id);
+        if (!fresh) return null;
+        return {
+          id: fresh.id,
+          name: fresh.brand,
+          price: fresh.sellingPrice,
+          requiresPrescription: fresh.requiresPrescription,
+          qty: it.qty,
+        };
+      })
+      .filter(Boolean);
+    if (incoming.length === 0) {
+      toast.error('Items no longer available');
+      return;
+    }
+    addMany(incoming);
+    toast.success(`Added ${incoming.length} ${incoming.length === 1 ? 'item' : 'items'} to cart`);
+    navigate('/cart');
+  };
 
   if (orders.length === 0) {
     return (
@@ -53,11 +81,12 @@ export default function Orders() {
           const badge = statusBadge[o.status] ?? { variant: 'neutral', label: o.status };
           return (
             <m.li key={o.id} variants={fadeUp}>
-              <Link
-                to={`/orders/${o.id}`}
-                className="block bg-bg-surface border border-border-subtle hover:border-border-strong rounded-2xl shadow-card hover:shadow-pop transition p-4 md:p-5"
+              <m.div
+                whileHover={{ y: -1 }}
+                transition={springs.soft}
+                className="bg-bg-surface border border-border-subtle hover:border-border-strong rounded-2xl shadow-card hover:shadow-pop transition p-4 md:p-5"
               >
-                <m.div whileHover={{ y: -1 }} transition={springs.soft}>
+                <Link to={`/orders/${o.id}`} className="block">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="text-caption text-text-tertiary tabular">
@@ -83,12 +112,25 @@ export default function Orders() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-3 flex items-center justify-end gap-1 text-caption text-primary font-semibold">
+                </Link>
+                <div className="mt-3 flex items-center justify-between gap-2">
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    leftIcon={<Repeat size={14} />}
+                    onClick={() => handleReorder(o)}
+                  >
+                    Reorder
+                  </Button>
+                  <Link
+                    to={`/orders/${o.id}`}
+                    className="inline-flex items-center gap-1 text-caption text-primary font-semibold hover:text-primary-hover"
+                  >
                     View details
                     <ArrowRight size={14} />
-                  </div>
-                </m.div>
-              </Link>
+                  </Link>
+                </div>
+              </m.div>
             </m.li>
           );
         })}

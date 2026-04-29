@@ -19,6 +19,7 @@ import {
 import Button from '@/components/Button';
 import HeroIllustration from '@/components/HeroIllustration';
 import RecentlyViewed from '@/components/RecentlyViewed';
+import RefillReminders from '@/components/RefillReminders';
 import { staggerContainer, fadeUp } from '@/motion/variants';
 import { springs } from '@/motion/transitions';
 
@@ -117,6 +118,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Refill reminders — only renders for authed users with subs due in 7 days */}
+      <RefillReminders />
 
       {/* Recently viewed (only renders for returning users with 2+ history) */}
       <RecentlyViewed />

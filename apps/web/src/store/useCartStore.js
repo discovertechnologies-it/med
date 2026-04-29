@@ -51,6 +51,33 @@ export const useCartStore = create(
         clear: () => set(empty, false, 'cart/clear'),
         getTotalQty: () => get().items.reduce((sum, i) => sum + i.qty, 0),
         getSubtotal: () => get().items.reduce((sum, i) => sum + i.price * i.qty, 0),
+        // Merge a list of items into the current cart, capping qty at 10 per item.
+        addMany: (incoming) =>
+          set(
+            (s) => {
+              const byId = new Map(s.items.map((i) => [i.id, i]));
+              for (const it of incoming) {
+                const existing = byId.get(it.id);
+                if (existing) {
+                  byId.set(it.id, {
+                    ...existing,
+                    qty: Math.min(10, existing.qty + (it.qty ?? 1)),
+                  });
+                } else {
+                  byId.set(it.id, {
+                    id: it.id,
+                    name: it.name,
+                    price: it.price,
+                    requiresPrescription: it.requiresPrescription,
+                    qty: Math.min(10, Math.max(1, it.qty ?? 1)),
+                  });
+                }
+              }
+              return { items: [...byId.values()] };
+            },
+            false,
+            'cart/addMany'
+          ),
       }),
       { name: 'med:cart' }
     ),

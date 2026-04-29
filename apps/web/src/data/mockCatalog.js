@@ -324,6 +324,31 @@ export function searchMedicines({ q = '', category = null, rx = null, generic = 
   });
 }
 
+// Hand-curated "frequently bought together" pairings — replaced by collaborative filtering in M4.
+const fbtPairs = {
+  'dolo-650': ['cetirizine-10', 'becosules'],
+  'paracetamol-generic-650': ['cetirizine-10', 'becosules'],
+  'crocin-650': ['cetirizine-10', 'pan-d'],
+  'calpol-650': ['cetirizine-10'],
+  'combiflam': ['pan-d', 'becosules'],
+  'pan-d': ['dolo-650'],
+  'pantop-d-generic': ['dolo-650'],
+  'augmentin-625': ['pan-d', 'becosules'],
+  'telma-40': ['glycomet-500'],
+  'telmisartan-generic': ['glycomet-500'],
+  'glycomet-500': ['amlong-5', 'vitamin-d3-60k'],
+  'amlong-5': ['telma-40'],
+  'cetirizine-10': ['vitamin-d3-60k'],
+  'vitamin-d3-60k': ['becosules'],
+  'becosules': ['vitamin-d3-60k'],
+};
+
+export function frequentlyBoughtFor(medicine) {
+  if (!medicine) return [];
+  const ids = fbtPairs[medicine.id] ?? [];
+  return ids.map(findMedicine).filter(Boolean);
+}
+
 export function alternativesFor(medicine) {
   if (!medicine) return [];
   // explicit alternatives + same salt across brands

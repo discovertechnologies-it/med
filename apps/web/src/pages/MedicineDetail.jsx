@@ -26,6 +26,7 @@ import WishlistButton from '@/components/WishlistButton';
 import StarRating from '@/components/StarRating';
 import ReviewsSection from '@/components/ReviewsSection';
 import RecentlyViewed from '@/components/RecentlyViewed';
+import FrequentlyBoughtTogether from '@/components/FrequentlyBoughtTogether';
 import { getReviews, ratingSummary } from '@/data/mockReviews';
 import { findMedicine, alternativesFor } from '@/data/mockCatalog';
 import { formatPrice, discountPercent } from '@/utils/formatPrice';
@@ -261,6 +262,9 @@ export default function MedicineDetail() {
           </m.div>
         </section>
       )}
+
+      {/* Frequently bought together */}
+      <FrequentlyBoughtTogether medicine={medicine} />
 
       {/* Recently viewed (excludes current) */}
       <div className="mt-10 md:mt-14 -mx-4 md:-mx-6 lg:-mx-8">

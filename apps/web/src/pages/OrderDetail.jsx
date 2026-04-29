@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { Link, useParams, Navigate } from 'react-router-dom';
+import { Link, useParams, useNavigate, Navigate } from 'react-router-dom';
 import { m, useReducedMotion } from 'framer-motion';
+import { toast } from 'sonner';
 import {
   CheckCircle2,
   MapPin,
@@ -11,12 +12,15 @@ import {
   ArrowRight,
   ShieldAlert,
   ShieldCheck,
+  Repeat,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import Button from '@/components/Button';
 import Badge from '@/components/Badge';
 import OrderTimeline from '@/components/OrderTimeline';
 import { useOrderStore } from '@/store/useOrderStore';
+import { useCartStore } from '@/store/useCartStore';
+import { findMedicine } from '@/data/mockCatalog';
 import { formatPrice } from '@/utils/formatPrice';
 import { springs } from '@/motion/transitions';
 
@@ -28,7 +32,9 @@ const paymentIcons = {
 
 export default function OrderDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const order = useOrderStore((s) => s.orders.find((o) => o.id === id));
+  const addMany = useCartStore((s) => s.addMany);
   const reduce = useReducedMotion();
 
   if (!order) {
@@ -36,6 +42,35 @@ export default function OrderDetail() {
   }
 
   const placedDate = useMemo(() => new Date(order.placedAt), [order.placedAt]);
+
+  const handleReorder = () => {
+    const incoming = order.items
+      .map((it) => {
+        const fresh = findMedicine(it.id);
+        if (!fresh) return null;
+        return {
+          id: fresh.id,
+          name: fresh.brand,
+          price: fresh.sellingPrice,
+          requiresPrescription: fresh.requiresPrescription,
+          qty: it.qty,
+        };
+      })
+      .filter(Boolean);
+
+    if (incoming.length === 0) {
+      toast.error('Items are no longer available');
+      return;
+    }
+    addMany(incoming);
+    const skipped = order.items.length - incoming.length;
+    toast.success(
+      skipped > 0
+        ? `Added ${incoming.length} ${incoming.length === 1 ? 'item' : 'items'} (${skipped} unavailable)`
+        : `Added ${incoming.length} ${incoming.length === 1 ? 'item' : 'items'} to cart`
+    );
+    navigate('/cart');
+  };
 
   return (
     <main className="mx-auto max-w-screen-xl px-4 md:px-6 lg:px-8 py-6 md:py-10">
@@ -79,6 +114,15 @@ export default function OrderDetail() {
 
         <div className="mt-6 md:mt-8">
           <OrderTimeline status={order.status} hasRx={order.hasRx} />
+        </div>
+
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Button leftIcon={<Repeat size={18} />} onClick={handleReorder}>
+            Reorder these items
+          </Button>
+          <Link to="/orders">
+            <Button variant="ghost">View all orders</Button>
+          </Link>
         </div>
       </m.section>
 
