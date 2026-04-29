@@ -23,6 +23,9 @@ import Badge from '@/components/Badge';
 import MedicineCard from '@/components/MedicineCard';
 import ProductGallery from '@/components/ProductGallery';
 import WishlistButton from '@/components/WishlistButton';
+import StarRating from '@/components/StarRating';
+import ReviewsSection from '@/components/ReviewsSection';
+import { getReviews, ratingSummary } from '@/data/mockReviews';
 import { findMedicine, alternativesFor } from '@/data/mockCatalog';
 import { formatPrice, discountPercent } from '@/utils/formatPrice';
 import { useCartStore } from '@/store/useCartStore';
@@ -43,6 +46,7 @@ export default function MedicineDetail() {
 
   const discount = discountPercent(medicine.mrp, medicine.sellingPrice);
   const alts = alternativesFor(medicine).slice(0, 4);
+  const reviewSummary = useMemo(() => ratingSummary(getReviews(medicine.id)), [medicine.id]);
   const cheapestAlt = alts.find((a) => a.sellingPrice < medicine.sellingPrice);
   const savings = cheapestAlt ? medicine.sellingPrice - cheapestAlt.sellingPrice : 0;
   const savingsPct = cheapestAlt
@@ -118,6 +122,16 @@ export default function MedicineDetail() {
           <p className="mt-1 text-body text-text-tertiary">
             {medicine.manufacturer} &middot; {medicine.packSize}
           </p>
+
+          {reviewSummary.total > 0 && (
+            <a href="#reviews" className="mt-2 inline-flex items-center gap-2 group">
+              <StarRating value={reviewSummary.avg} size={16} />
+              <span className="text-caption text-text-secondary group-hover:text-text-primary tabular">
+                {reviewSummary.avg.toFixed(1)} ({reviewSummary.total}{' '}
+                {reviewSummary.total === 1 ? 'review' : 'reviews'})
+              </span>
+            </a>
+          )}
 
           <div className="mt-5 flex flex-wrap items-end gap-x-3 gap-y-1 tabular">
             <span className="text-display md:text-display-lg text-text-primary font-bold">
@@ -212,6 +226,11 @@ export default function MedicineDetail() {
           <p className="text-body text-text-secondary">{medicine.storage}</p>
         </SectionCard>
       </section>
+
+      {/* Reviews */}
+      <div id="reviews" className="scroll-mt-20">
+        <ReviewsSection medicine={medicine} />
+      </div>
 
       {/* Cheaper alternatives */}
       {alts.length > 0 && (

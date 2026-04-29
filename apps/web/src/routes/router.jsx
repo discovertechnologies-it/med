@@ -18,6 +18,8 @@ const AccountLayout = lazy(() => import('@/pages/account/AccountLayout'));
 const Profile = lazy(() => import('@/pages/account/Profile'));
 const Addresses = lazy(() => import('@/pages/account/Addresses'));
 const Wishlist = lazy(() => import('@/pages/account/Wishlist'));
+const Subscriptions = lazy(() => import('@/pages/account/Subscriptions'));
+const Help = lazy(() => import('@/pages/Help'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
 const withSuspense = (node) => <Suspense fallback={<Skeleton.Page />}>{node}</Suspense>;
@@ -37,6 +39,7 @@ export const router = createBrowserRouter([
       { path: '/orders', element: protectedRoute(<Orders />) },
       { path: '/orders/:id', element: protectedRoute(<OrderDetail />) },
       { path: '/prescriptions', element: protectedRoute(<Prescriptions />) },
+      { path: '/help', element: withSuspense(<Help />) },
       {
         path: '/account',
         element: <ProtectedRoute>{withSuspense(<AccountLayout />)}</ProtectedRoute>,
@@ -45,6 +48,7 @@ export const router = createBrowserRouter([
           { path: 'profile', element: withSuspense(<Profile />) },
           { path: 'addresses', element: withSuspense(<Addresses />) },
           { path: 'wishlist', element: withSuspense(<Wishlist />) },
+          { path: 'subscriptions', element: withSuspense(<Subscriptions />) },
         ],
       },
       { path: '*', element: withSuspense(<NotFound />) },
