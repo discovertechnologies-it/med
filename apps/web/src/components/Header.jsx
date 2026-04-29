@@ -1,10 +1,11 @@
 import { Link, NavLink } from 'react-router-dom';
 import { m } from 'framer-motion';
-import { ShoppingBag, Search, User } from 'lucide-react';
+import { ShoppingBag, Search, User, LogOut, Package } from 'lucide-react';
 import clsx from 'clsx';
 import Logo from './Logo';
 import Button from './Button';
 import { useCartStore } from '@/store/useCartStore';
+import { useAuthStore, selectIsAuthenticated } from '@/store/useAuthStore';
 import { useScrolled } from '@/hooks/useScrolled';
 import { springs } from '@/motion/transitions';
 
@@ -17,6 +18,8 @@ const navLinks = [
 
 export default function Header() {
   const cartCount = useCartStore((s) => s.items.reduce((n, i) => n + i.qty, 0));
+  const isAuthed = useAuthStore(selectIsAuthenticated);
+  const logout = useAuthStore((s) => s.logout);
   const scrolled = useScrolled(4);
 
   return (
@@ -78,17 +81,41 @@ export default function Header() {
             )}
           </Link>
 
-          <Link to="/auth/login" className="hidden md:inline-flex">
-            <Button size="sm" variant="ghost" leftIcon={<User size={18} />}>
-              Sign in
-            </Button>
-          </Link>
-
-          <Link to="/auth/login" className="md:hidden">
-            <Button size="sm" variant="ghost" aria-label="Sign in">
-              <User size={18} />
-            </Button>
-          </Link>
+          {isAuthed ? (
+            <>
+              <Link to="/orders" className="hidden md:inline-flex">
+                <Button size="sm" variant="ghost" leftIcon={<Package size={18} />}>
+                  Orders
+                </Button>
+              </Link>
+              <Link to="/orders" className="md:hidden">
+                <Button size="sm" variant="ghost" aria-label="Orders">
+                  <Package size={18} />
+                </Button>
+              </Link>
+              <button
+                type="button"
+                onClick={logout}
+                aria-label="Sign out"
+                className="hidden md:inline-flex h-9 w-9 items-center justify-center rounded-full text-text-secondary hover:text-text-primary hover:bg-bg-muted"
+              >
+                <LogOut size={18} />
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/auth/login" className="hidden md:inline-flex">
+                <Button size="sm" variant="ghost" leftIcon={<User size={18} />}>
+                  Sign in
+                </Button>
+              </Link>
+              <Link to="/auth/login" className="md:hidden">
+                <Button size="sm" variant="ghost" aria-label="Sign in">
+                  <User size={18} />
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

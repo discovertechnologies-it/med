@@ -20,6 +20,7 @@ import Badge from '@/components/Badge';
 import ProductImage from '@/components/ProductImage';
 import EmptyCartIllustration from '@/components/EmptyCartIllustration';
 import { useCartStore } from '@/store/useCartStore';
+import { useAuthStore, selectIsAuthenticated } from '@/store/useAuthStore';
 import { findMedicine } from '@/data/mockCatalog';
 import { findCoupon, applyCouponToTotals, coupons as allCoupons } from '@/data/mockCoupons';
 import { formatPrice } from '@/utils/formatPrice';
@@ -38,6 +39,12 @@ export default function Cart() {
   const clear = useCartStore((s) => s.clear);
 
   const navigate = useNavigate();
+  const isAuthed = useAuthStore(selectIsAuthenticated);
+
+  const goToCheckout = () => {
+    if (isAuthed) navigate('/checkout');
+    else navigate('/auth/login?next=/checkout');
+  };
 
   const enriched = useMemo(
     () => items.map((i) => ({ ...i, medicine: findMedicine(i.id) })).filter((i) => i.medicine),
@@ -167,7 +174,8 @@ export default function Cart() {
             baseDelivery={baseDelivery}
             total={total}
             applyCoupon={applyCoupon}
-            navigate={navigate}
+            goToCheckout={goToCheckout}
+            isAuthed={isAuthed}
             hasRx={hasRx}
           />
         </aside>
@@ -182,11 +190,8 @@ export default function Cart() {
           </p>
         </div>
         <div className="ml-auto">
-          <Button
-            rightIcon={<ArrowRight size={18} />}
-            onClick={() => toast('Checkout coming next')}
-          >
-            Checkout
+          <Button rightIcon={<ArrowRight size={18} />} onClick={goToCheckout}>
+            {isAuthed ? 'Checkout' : 'Sign in to checkout'}
           </Button>
         </div>
       </div>
@@ -322,7 +327,8 @@ function SummaryCard({
   baseDelivery,
   total,
   applyCoupon,
-  navigate,
+  goToCheckout,
+  isAuthed,
   hasRx,
 }) {
   return (
@@ -366,9 +372,9 @@ function SummaryCard({
           fullWidth
           size="lg"
           rightIcon={<ArrowRight size={18} />}
-          onClick={() => toast('Checkout coming next')}
+          onClick={goToCheckout}
         >
-          Proceed to checkout
+          {isAuthed ? 'Proceed to checkout' : 'Sign in to checkout'}
         </Button>
       </div>
 

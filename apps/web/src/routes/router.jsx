@@ -6,8 +6,14 @@ import Skeleton from '@/components/Skeleton';
 
 const Home = lazy(() => import('@/pages/Home'));
 const Search = lazy(() => import('@/pages/Search'));
+const Categories = lazy(() => import('@/pages/Categories'));
 const MedicineDetail = lazy(() => import('@/pages/MedicineDetail'));
 const Cart = lazy(() => import('@/pages/Cart'));
+const Login = lazy(() => import('@/pages/auth/Login'));
+const Checkout = lazy(() => import('@/pages/Checkout'));
+const Orders = lazy(() => import('@/pages/Orders'));
+const OrderDetail = lazy(() => import('@/pages/OrderDetail'));
+const Prescriptions = lazy(() => import('@/pages/Prescriptions'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
 const withSuspense = (node) => <Suspense fallback={<Skeleton.Page />}>{node}</Suspense>;
@@ -19,10 +25,14 @@ export const router = createBrowserRouter([
     children: [
       { path: '/', element: withSuspense(<Home />) },
       { path: '/search', element: withSuspense(<Search />) },
+      { path: '/categories', element: withSuspense(<Categories />) },
       { path: '/medicine/:id', element: withSuspense(<MedicineDetail />) },
       { path: '/cart', element: withSuspense(<Cart />) },
-      // protected routes wired as their pages land
-      // example: { path: '/checkout', element: protectedRoute(<Checkout />) },
+      { path: '/auth/login', element: withSuspense(<Login />) },
+      { path: '/checkout', element: protectedRoute(<Checkout />) },
+      { path: '/orders', element: protectedRoute(<Orders />) },
+      { path: '/orders/:id', element: protectedRoute(<OrderDetail />) },
+      { path: '/prescriptions', element: protectedRoute(<Prescriptions />) },
       { path: '*', element: withSuspense(<NotFound />) },
     ],
   },
