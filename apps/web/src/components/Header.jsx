@@ -4,8 +4,10 @@ import { ShoppingBag, Search, User, Package } from 'lucide-react';
 import clsx from 'clsx';
 import Logo from './Logo';
 import Button from './Button';
+import { KbdHint } from './CommandPalette';
 import { useCartStore } from '@/store/useCartStore';
 import { useAuthStore, selectIsAuthenticated } from '@/store/useAuthStore';
+import { useCommandStore } from '@/store/useCommandStore';
 import { useScrolled } from '@/hooks/useScrolled';
 import { springs } from '@/motion/transitions';
 
@@ -19,6 +21,7 @@ const navLinks = [
 export default function Header() {
   const cartCount = useCartStore((s) => s.items.reduce((n, i) => n + i.qty, 0));
   const isAuthed = useAuthStore(selectIsAuthenticated);
+  const openCmd = useCommandStore((s) => s.openIt);
   const scrolled = useScrolled(4);
 
   return (
@@ -51,6 +54,20 @@ export default function Header() {
             </NavLink>
           ))}
         </nav>
+
+        {/* Desktop command palette trigger */}
+        <button
+          type="button"
+          onClick={openCmd}
+          aria-label="Open quick search"
+          className="hidden md:inline-flex items-center gap-2 h-9 pl-3 pr-2 rounded-full bg-bg-muted hover:bg-border-subtle text-text-secondary hover:text-text-primary transition-colors"
+        >
+          <Search size={16} />
+          <span className="text-caption">Quick search</span>
+          <span className="inline-flex items-center justify-center px-1.5 h-5 rounded border border-border-subtle bg-bg-surface text-text-tertiary tabular leading-none">
+            <KbdHint />
+          </span>
+        </button>
 
         <div className="flex items-center gap-1 md:gap-2">
           <Link

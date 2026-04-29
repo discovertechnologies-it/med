@@ -5,6 +5,9 @@ import Footer from './Footer';
 import PageTransition from './PageTransition';
 import ScrollToTop from './ScrollToTop';
 import MobileNav from './MobileNav';
+import CommandPalette from './CommandPalette';
+import { useCommandStore } from '@/store/useCommandStore';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 
 const NO_BOTTOM_NAV_PADDING = ['/medicine/', '/auth/'];
 const NO_BOTTOM_NAV_PADDING_EXACT = new Set(['/cart', '/checkout']);
@@ -17,6 +20,9 @@ function bottomNavVisible(pathname) {
 export default function RootLayout() {
   const location = useLocation();
   const padBottom = bottomNavVisible(location.pathname);
+  const toggle = useCommandStore((s) => s.toggle);
+
+  useKeyboardShortcut({ key: 'k', meta: true }, toggle);
 
   return (
     <div className="min-h-dvh flex flex-col bg-bg-page text-text-primary">
@@ -31,6 +37,7 @@ export default function RootLayout() {
       </main>
       <Footer />
       <MobileNav />
+      <CommandPalette />
     </div>
   );
 }
