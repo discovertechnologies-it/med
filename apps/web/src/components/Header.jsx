@@ -1,6 +1,6 @@
 import { Link, NavLink } from 'react-router-dom';
 import { m } from 'framer-motion';
-import { ShoppingBag, Search, User, LogOut, Package } from 'lucide-react';
+import { ShoppingBag, Search, User, Package } from 'lucide-react';
 import clsx from 'clsx';
 import Logo from './Logo';
 import Button from './Button';
@@ -19,7 +19,6 @@ const navLinks = [
 export default function Header() {
   const cartCount = useCartStore((s) => s.items.reduce((n, i) => n + i.qty, 0));
   const isAuthed = useAuthStore(selectIsAuthenticated);
-  const logout = useAuthStore((s) => s.logout);
   const scrolled = useScrolled(4);
 
   return (
@@ -93,14 +92,11 @@ export default function Header() {
                   <Package size={18} />
                 </Button>
               </Link>
-              <button
-                type="button"
-                onClick={logout}
-                aria-label="Sign out"
-                className="hidden md:inline-flex h-9 w-9 items-center justify-center rounded-full text-text-secondary hover:text-text-primary hover:bg-bg-muted"
-              >
-                <LogOut size={18} />
-              </button>
+              <Link to="/account" aria-label="Account">
+                <Button size="sm" variant="ghost">
+                  <User size={18} />
+                </Button>
+              </Link>
             </>
           ) : (
             <>

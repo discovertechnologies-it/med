@@ -21,9 +21,9 @@ import RadioCard from '@/components/RadioCard';
 import { useCartStore } from '@/store/useCartStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useOrderStore } from '@/store/useOrderStore';
+import { useAddressStore, selectDefaultAddress } from '@/store/useAddressStore';
 import { findMedicine } from '@/data/mockCatalog';
 import { findCoupon, applyCouponToTotals } from '@/data/mockCoupons';
-import { defaultAddresses } from '@/data/mockAddresses';
 import { formatPrice } from '@/utils/formatPrice';
 import { fadeUp, staggerContainer } from '@/motion/variants';
 
@@ -61,10 +61,10 @@ export default function Checkout() {
   const clearCart = useCartStore((s) => s.clear);
   const user = useAuthStore((s) => s.user);
   const placeOrder = useOrderStore((s) => s.place);
+  const addresses = useAddressStore((s) => s.addresses);
+  const initialAddress = useAddressStore(selectDefaultAddress);
 
-  const [addressId, setAddressId] = useState(
-    () => defaultAddresses.find((a) => a.isDefault)?.id ?? defaultAddresses[0]?.id
-  );
+  const [addressId, setAddressId] = useState(() => initialAddress?.id);
   const [deliveryId, setDeliveryId] = useState('standard');
   const [paymentId, setPaymentId] = useState('upi');
   const [placing, setPlacing] = useState(false);
@@ -101,7 +101,7 @@ export default function Checkout() {
   const deliveryFee = couponResult.freeDelivery && deliveryId === 'standard' ? 0 : baseDelivery;
   const total = Math.max(0, subtotal - couponResult.discount + deliveryFee);
 
-  const address = defaultAddresses.find((a) => a.id === addressId);
+  const address = addresses.find((a) => a.id === addressId) ?? addresses[0];
 
   const handlePlace = async () => {
     if (!address) {
@@ -173,18 +173,16 @@ export default function Checkout() {
               animate="animate"
               className="grid grid-cols-1 sm:grid-cols-2 gap-3"
             >
-              {defaultAddresses.map((a) => (
+              {addresses.map((a) => (
                 <m.div key={a.id} variants={fadeUp}>
-                  <RadioCard
-                    active={addressId === a.id}
-                    onClick={() => setAddressId(a.id)}
-                  >
+                  <RadioCard active={addressId === a.id} onClick={() => setAddressId(a.id)}>
                     <div className="flex items-center gap-2 mb-1">
                       <p className="text-body font-semibold text-text-primary">{a.label}</p>
                       {a.isDefault && <Badge variant="primary">Default</Badge>}
                     </div>
                     <p className="text-caption text-text-secondary">
-                      {a.line1}, {a.line2}
+                      {a.line1}
+                      {a.line2 ? `, ${a.line2}` : ''}
                     </p>
                     <p className="text-caption text-text-secondary">
                       {a.city}, {a.state} {a.pincode}
@@ -192,15 +190,15 @@ export default function Checkout() {
                   </RadioCard>
                 </m.div>
               ))}
-              <m.button
-                variants={fadeUp}
-                type="button"
-                onClick={() => toast('Address management coming soon')}
-                className="border-2 border-dashed border-border-subtle hover:border-border-strong rounded-xl p-4 flex items-center justify-center gap-2 text-text-secondary hover:text-text-primary transition-colors min-h-[110px]"
-              >
-                <Plus size={16} />
-                <span className="text-body font-semibold">Add new address</span>
-              </m.button>
+              <m.div variants={fadeUp}>
+                <Link
+                  to="/account/addresses?new=1"
+                  className="h-full flex items-center justify-center gap-2 border-2 border-dashed border-border-subtle hover:border-border-strong rounded-xl p-4 text-text-secondary hover:text-text-primary transition-colors min-h-[110px]"
+                >
+                  <Plus size={16} />
+                  <span className="text-body font-semibold">Add new address</span>
+                </Link>
+              </m.div>
             </m.div>
           </Section>
 

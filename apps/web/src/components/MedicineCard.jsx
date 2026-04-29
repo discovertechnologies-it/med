@@ -5,6 +5,7 @@ import { Plus, ShieldAlert, Tag, Sparkles } from 'lucide-react';
 import clsx from 'clsx';
 import Badge from './Badge';
 import ProductImage from './ProductImage';
+import WishlistButton from './WishlistButton';
 import { formatPrice, discountPercent } from '@/utils/formatPrice';
 import { useCartStore } from '@/store/useCartStore';
 import { springs } from '@/motion/transitions';
@@ -55,14 +56,20 @@ export default function MedicineCard({ medicine, className }) {
             )}
           </div>
 
-          {/* Top-right: discount */}
-          {discount > 0 && (
-            <div className="absolute top-2 right-2">
+          {/* Top-right: discount + wishlist */}
+          <div className="absolute top-2 right-2 flex flex-col items-end gap-1.5">
+            {discount > 0 && (
               <Badge variant="accent" icon={<Tag size={12} />}>
                 {discount}% off
               </Badge>
-            </div>
-          )}
+            )}
+            <WishlistButton
+              medicineId={medicine.id}
+              medicineName={medicine.brand}
+              size="sm"
+              variant="overlay"
+            />
+          </div>
         </div>
 
         {/* Content area — flex-1 so price+add stick to bottom */}

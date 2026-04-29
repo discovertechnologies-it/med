@@ -22,6 +22,7 @@ import Button from '@/components/Button';
 import Badge from '@/components/Badge';
 import MedicineCard from '@/components/MedicineCard';
 import ProductGallery from '@/components/ProductGallery';
+import WishlistButton from '@/components/WishlistButton';
 import { findMedicine, alternativesFor } from '@/data/mockCatalog';
 import { formatPrice, discountPercent } from '@/utils/formatPrice';
 import { useCartStore } from '@/store/useCartStore';
@@ -146,9 +147,12 @@ export default function MedicineDetail() {
                 Add to cart
               </Button>
             )}
-            <Button variant="secondary" size="lg">
-              Buy now
-            </Button>
+            <WishlistButton
+              medicineId={medicine.id}
+              medicineName={medicine.brand}
+              size="lg"
+              variant="inline"
+            />
           </div>
 
           {/* Trust strip */}
