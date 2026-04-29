@@ -20,6 +20,7 @@ import Button from '@/components/Button';
 import HeroIllustration from '@/components/HeroIllustration';
 import RecentlyViewed from '@/components/RecentlyViewed';
 import RefillReminders from '@/components/RefillReminders';
+import TrendingMedicines from '@/components/TrendingMedicines';
 import { staggerContainer, fadeUp } from '@/motion/variants';
 import { springs } from '@/motion/transitions';
 
@@ -124,6 +125,9 @@ export default function Home() {
 
       {/* Recently viewed (only renders for returning users with 2+ history) */}
       <RecentlyViewed />
+
+      {/* Trending — cold-start fallback when no recent views */}
+      <TrendingMedicines />
 
       {/* Features */}
       <section className="mx-auto max-w-screen-xl px-4 md:px-6 lg:px-8 pb-12 md:pb-16">

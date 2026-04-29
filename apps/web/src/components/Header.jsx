@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import Logo from './Logo';
 import Button from './Button';
 import { KbdHint } from './CommandPalette';
+import PincodeChip from './PincodeChip';
 import { useCartStore } from '@/store/useCartStore';
 import { useAuthStore, selectIsAuthenticated } from '@/store/useAuthStore';
 import { useCommandStore } from '@/store/useCommandStore';
@@ -70,6 +71,10 @@ export default function Header() {
         </button>
 
         <div className="flex items-center gap-1 md:gap-2">
+          <div className="hidden sm:block">
+            <PincodeChip />
+          </div>
+
           <Link
             to="/search"
             className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full text-text-primary hover:bg-bg-muted"

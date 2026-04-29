@@ -3,9 +3,12 @@ import { createRoot } from 'react-dom/client';
 import '@fontsource-variable/inter/index.css';
 import App from './App';
 import './styles/tailwind.css';
+import { bootstrapPwa } from './pwa';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
   </StrictMode>
 );
+
+bootstrapPwa();

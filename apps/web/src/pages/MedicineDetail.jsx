@@ -23,6 +23,7 @@ import Badge from '@/components/Badge';
 import MedicineCard from '@/components/MedicineCard';
 import ProductGallery from '@/components/ProductGallery';
 import WishlistButton from '@/components/WishlistButton';
+import ShareButton from '@/components/ShareButton';
 import StarRating from '@/components/StarRating';
 import ReviewsSection from '@/components/ReviewsSection';
 import RecentlyViewed from '@/components/RecentlyViewed';
@@ -174,6 +175,12 @@ export default function MedicineDetail() {
               medicineName={medicine.brand}
               size="lg"
               variant="inline"
+            />
+            <ShareButton
+              size="lg"
+              title={`${medicine.brand} on Med`}
+              text={`${medicine.brand} (${medicine.salt}) — ${medicine.manufacturer}`}
+              path={`/medicine/${medicine.id}`}
             />
           </div>
 

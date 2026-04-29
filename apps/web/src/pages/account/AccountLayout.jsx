@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { m } from 'framer-motion';
-import { User, MapPin, Heart, LogOut, Repeat } from 'lucide-react';
+import { User, MapPin, Heart, LogOut, Repeat, Bell, Settings } from 'lucide-react';
 import clsx from 'clsx';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useProfileStore } from '@/store/useProfileStore';
@@ -11,6 +11,8 @@ const sections = [
   { to: '/account/addresses', label: 'Addresses', icon: <MapPin size={18} /> },
   { to: '/account/wishlist', label: 'Wishlist', icon: <Heart size={18} /> },
   { to: '/account/subscriptions', label: 'Subscriptions', icon: <Repeat size={18} /> },
+  { to: '/account/notifications', label: 'Notifications', icon: <Bell size={18} /> },
+  { to: '/account/settings', label: 'Settings', icon: <Settings size={18} /> },
 ];
 
 export default function AccountLayout() {

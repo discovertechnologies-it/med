@@ -308,9 +308,29 @@ export function findMedicine(id) {
   return medicines.find((m) => m.id === id) || null;
 }
 
-export function searchMedicines({ q = '', category = null, rx = null, generic = null } = {}) {
+// Hand-picked best-sellers for cold-start recommendations.
+const trendingIds = [
+  'dolo-650',
+  'cetirizine-10',
+  'pan-d',
+  'glycomet-500',
+  'becosules',
+  'combiflam',
+];
+
+export function getTrending() {
+  return trendingIds.map(findMedicine).filter(Boolean);
+}
+
+export function searchMedicines({
+  q = '',
+  category = null,
+  rx = null,
+  generic = null,
+  sort = 'relevance',
+} = {}) {
   const ql = q.trim().toLowerCase();
-  return medicines.filter((m) => {
+  const filtered = medicines.filter((m) => {
     if (ql) {
       const haystack = `${m.brand} ${m.salt} ${m.manufacturer}`.toLowerCase();
       if (!haystack.includes(ql)) return false;
@@ -322,6 +342,22 @@ export function searchMedicines({ q = '', category = null, rx = null, generic = 
     if (generic === 'brand' && m.isGeneric) return false;
     return true;
   });
+  return sortMedicines(filtered, sort);
+}
+
+export function sortMedicines(list, sort) {
+  const arr = [...list];
+  if (sort === 'price-asc') arr.sort((a, b) => a.sellingPrice - b.sellingPrice);
+  else if (sort === 'price-desc') arr.sort((a, b) => b.sellingPrice - a.sellingPrice);
+  else if (sort === 'discount') {
+    arr.sort((a, b) => {
+      const da = a.mrp > 0 ? (a.mrp - a.sellingPrice) / a.mrp : 0;
+      const db = b.mrp > 0 ? (b.mrp - b.sellingPrice) / b.mrp : 0;
+      return db - da;
+    });
+  }
+  // 'relevance' is the catalog's natural order
+  return arr;
 }
 
 // Hand-curated "frequently bought together" pairings — replaced by collaborative filtering in M4.
